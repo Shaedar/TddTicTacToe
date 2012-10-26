@@ -11,6 +11,7 @@ namespace TicTacToe
 		const int boardHeight = 3;
 		const int boardWidth = 3;
 		IEnumerable<int> allowedHeights = Enumerable.Range(1, boardHeight);
+		IEnumerable<int> allowedWidths = Enumerable.Range (1, boardWidth);
 
 		[Test]
 		[ExpectedException(typeof(Exception))]
@@ -37,6 +38,19 @@ namespace TicTacToe
 			return allowedHeights.Contains(moveY);
 		}
 
+		void ThrowIfWidthNotAllowed (int moveX)
+		{
+			if (!IsWidthAllowed (moveX)) 
+			{
+				throw new Exception ();
+			}
+		}
+
+		bool IsWidthAllowed (int moveX)
+		{
+			return allowedWidths.Contains (moveX);
+		}
+
 		[Test]
 		[ExpectedException(typeof(Exception))]
 		public void CannotPlayMarkAboveTheBoardEdges ()
@@ -60,10 +74,8 @@ namespace TicTacToe
 		public void CannotPlayMarkLeftOfTheBoardEdges ()
 		{
 			int moveX = 0;
-			int boardLeftmostCoordinate = 1;
-			
-			if (moveX <  boardLeftmostCoordinate)
-				throw new Exception();
+
+			ThrowIfWidthNotAllowed(moveX);
 		}
 		
 		[Test]
@@ -71,6 +83,8 @@ namespace TicTacToe
 		public void CannotPlayMarkRightOfTheBoardEdges ()
 		{
 			int moveX = 4;
+
+			ThrowIfWidthNotAllowed(moveX);
 		}
 	}
 }
