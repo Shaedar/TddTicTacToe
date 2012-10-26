@@ -55,6 +55,12 @@ namespace TicTacToe
 			ThrowIfHeightNotAllowed(moveY);
 		}
 
+		[Test]
+		[ExpectedException(typeof(Exception))]
+		public void CannotPlayMarkLeftOfBoardEdges ()
+		{
+			int moveX = 0;
+		}
 	}
 }
 
