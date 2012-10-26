@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace TicTacToe
@@ -8,6 +10,7 @@ namespace TicTacToe
 	{
 		const int boardHeight = 3;
 		const int boardWidth = 3;
+		IEnumerable<int> allowedHeights = Enumerable.Range(1, boardHeight);
 
 		[Test]
 		[ExpectedException(typeof(Exception))]
@@ -22,22 +25,34 @@ namespace TicTacToe
 			}
 		}
 
+		void ThrowIfHeightNotAllowed (int moveY)
+		{
+			if (!IsHeightAllowed (moveY)) {
+				throw new Exception ();
+			}
+		}
+
+		bool IsHeightAllowed (int moveY)
+		{
+			return allowedHeights.Contains(moveY);
+		}
+
 		[Test]
 		[ExpectedException(typeof(Exception))]
 		public void CannotPlayMarkAboveTheBoardEdges ()
 		{
-			int moveX = 4;
+			int moveY = 4;
 
-			if (moveX > boardHeight)
-				throw new Exception();
+			ThrowIfHeightNotAllowed (moveY);
 		}
 
 		[Test]
 		[ExpectedException(typeof(Exception))]
 		public void CannotPlayMarkBelowTheBoardEdges ()
 		{
-			int moveX = 0;
+			int moveY = 0;
 
+			ThrowIfHeightNotAllowed(moveY);
 		}
 
 	}
