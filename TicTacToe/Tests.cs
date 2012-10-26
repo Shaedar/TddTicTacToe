@@ -6,6 +6,9 @@ namespace TicTacToe
 	[TestFixture]
 	public class Tests
 	{
+		const int boardHeight = 3;
+		const int boardWidth = 3;
+
 		[Test]
 		[ExpectedException(typeof(Exception))]
 		public void PlayerCannotPlayTwiceInARow ()
@@ -21,12 +24,22 @@ namespace TicTacToe
 
 		[Test]
 		[ExpectedException(typeof(Exception))]
-		public void PlayerCannotPlayOutsideBoard ()
+		public void CannotPlayMarkAboveTheBoardEdges ()
 		{
-			int boardHeight = 3;
-			int boardWidth = 3;
+			int moveX = 4;
+
+			if (moveX > boardHeight)
+				throw new Exception();
+		}
+
+		[Test]
+		[ExpectedException(typeof(Exception))]
+		public void CannotPlayMarkBelowTheBoardEdges ()
+		{
+			int moveX = 0;
 
 		}
+
 	}
 }
 
