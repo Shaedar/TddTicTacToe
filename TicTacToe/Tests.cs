@@ -18,6 +18,15 @@ namespace TicTacToe
 				throw new Exception();
 			}
 		}
+
+		[Test]
+		[ExpectedException(typeof(Exception))]
+		public void PlayerCannotPlayOutsideBoard ()
+		{
+			int boardHeight = 3;
+			int boardWidth = 3;
+
+		}
 	}
 }
 
