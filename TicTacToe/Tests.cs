@@ -3,15 +3,20 @@ using NUnit.Framework;
 
 namespace TicTacToe
 {
-	[TestFixture()]
+	[TestFixture]
 	public class Tests
 	{
-		[Test()]
+		[Test]
 		[ExpectedException(typeof(Exception))]
-		public void PlayerCannotPlayTwiceInARow()
+		public void PlayerCannotPlayTwiceInARow ()
 		{
 			char lastTurn = 'X';
-			char turn = 'X';	
+			char turn = 'X';
+
+			if (lastTurn == turn) 
+			{
+				throw new Exception();
+			}
 		}
 	}
 }
