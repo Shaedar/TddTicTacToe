@@ -57,9 +57,20 @@ namespace TicTacToe
 
 		[Test]
 		[ExpectedException(typeof(Exception))]
-		public void CannotPlayMarkLeftOfBoardEdges ()
+		public void CannotPlayMarkLeftOfTheBoardEdges ()
 		{
 			int moveX = 0;
+			int boardLeftmostCoordinate = 1;
+			
+			if (moveX <  boardLeftMostCoordinate)
+				throw new Exception();
+		}
+		
+		[Test]
+		[ExpectedException(typeof(Exception))]
+		public void CannotPlayMarkRightOfTheBoardEdges ()
+		{
+			int moveX = 4;
 		}
 	}
 }
