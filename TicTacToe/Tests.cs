@@ -86,6 +86,17 @@ namespace TicTacToe
 
 			ThrowIfWidthNotAllowed(moveX);
 		}
+
+		[Test]
+		[ExpectedException(typeof(Exception))]
+		public void CannotPlayMarkOverAlreadyPlayedMark ()
+		{
+			int previousMarkHeight = 2;
+			int previousMarkWidth = 2;
+
+			int nextMarkHeight = 2;
+			int nextMarkWidth = 2;
+		}
 	}
 }
 
