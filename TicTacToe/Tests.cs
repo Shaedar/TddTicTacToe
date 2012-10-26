@@ -62,7 +62,7 @@ namespace TicTacToe
 			int moveX = 0;
 			int boardLeftmostCoordinate = 1;
 			
-			if (moveX <  boardLeftMostCoordinate)
+			if (moveX <  boardLeftmostCoordinate)
 				throw new Exception();
 		}
 		
