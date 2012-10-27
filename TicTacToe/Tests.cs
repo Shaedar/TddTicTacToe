@@ -20,7 +20,7 @@ namespace TicTacToe
 			turns = new List<char>();
 		}
 
-		void play (char turn)
+		void play (char turn, int x, int y)
 		{
 			ThrowIfFirstTurnIsO (turn);
 			ThrowIfPreviousTurnWasBySameThePlayer(turn);
@@ -47,8 +47,8 @@ namespace TicTacToe
 		[ExpectedException(typeof(Exception))]
 		public void PlayerCannotPlayTwiceInARow ()
 		{
-			play ('X');
-			play ('X');
+			play ('X', 1, 1);
+			play ('X', 1, 2);
 		}
 
 		void ThrowIfHeightNotAllowed (int moveY)
@@ -130,7 +130,24 @@ namespace TicTacToe
 		[ExpectedException(typeof(Exception))]
 		public void ODoesNotStartTheGame ()
 		{
-			play('O');
+			play('O', 1, 1);
+		}
+
+		[Test]
+		public void FirstPlayerWithThreeHorizontalWins ()
+		{
+			play ('X', 1, 1);
+			play ('O', 1, 2);
+			play ('X', 2, 1);
+			play ('O', 2, 2);
+			play ('X', 3, 1);
+
+			Assert.That(XHasWon());
+		}
+
+		private bool XHasWon ()
+		{
+			return false;
 		}
 	}
 }
