@@ -96,6 +96,9 @@ namespace TicTacToe
 
 			int nextMarkHeight = 2;
 			int nextMarkWidth = 2;
+
+			if (previousMarkHeight == nextMarkHeight && previousMarkWidth == nextMarkWidth)
+				throw new Exception();
 		}
 	}
 }
