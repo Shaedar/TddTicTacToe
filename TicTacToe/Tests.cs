@@ -12,6 +12,27 @@ namespace TicTacToe
 		const int boardWidth = 3;
 		IEnumerable<int> allowedHeights = Enumerable.Range(1, boardHeight);
 		IEnumerable<int> allowedWidths = Enumerable.Range (1, boardWidth);
+		IList<char> turns;
+
+		[SetUp]
+		public void Setup ()
+		{
+			turns = new List<char>();
+		}
+
+		void play (char turn)
+		{
+			ThrowIfFirstTurnIsO (turn);
+
+			turns.Add(turn);
+		}
+
+		void ThrowIfFirstTurnIsO (char turn)
+		{
+			if (!turns.Any () && turn == 'O') {
+				throw new Exception ();
+			}
+		}
 
 		[Test]
 		[ExpectedException(typeof(Exception))]
@@ -105,8 +126,7 @@ namespace TicTacToe
 		[ExpectedException(typeof(Exception))]
 		public void ODoesNotStartTheGame ()
 		{
-			int round = 1;
-			char turn = 'O';
+			play('O');
 		}
 	}
 }
