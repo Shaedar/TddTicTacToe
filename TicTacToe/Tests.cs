@@ -100,6 +100,14 @@ namespace TicTacToe
 			if (previousMarkHeight == nextMarkHeight && previousMarkWidth == nextMarkWidth)
 				throw new Exception();
 		}
+
+		[Test]
+		[ExpectedException(typeof(Exception))]
+		public void ODoesNotStartTheGame ()
+		{
+			int round = 1;
+			char turn = 'O';
+		}
 	}
 }
 
