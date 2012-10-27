@@ -23,8 +23,17 @@ namespace TicTacToe
 		void play (char turn)
 		{
 			ThrowIfFirstTurnIsO (turn);
+			ThrowIfPreviousTurnWasBySameThePlayer(turn);
 
 			turns.Add(turn);
+		}
+
+		void ThrowIfPreviousTurnWasBySameThePlayer (char turn)
+		{
+			if (turn == turns.LastOrDefault ()) 
+			{
+				throw new Exception();
+			}
 		}
 
 		void ThrowIfFirstTurnIsO (char turn)
@@ -38,13 +47,8 @@ namespace TicTacToe
 		[ExpectedException(typeof(Exception))]
 		public void PlayerCannotPlayTwiceInARow ()
 		{
-			char lastTurn = 'X';
-			char turn = 'X';
-
-			if (lastTurn == turn) 
-			{
-				throw new Exception();
-			}
+			play ('X');
+			play ('X');
 		}
 
 		void ThrowIfHeightNotAllowed (int moveY)
