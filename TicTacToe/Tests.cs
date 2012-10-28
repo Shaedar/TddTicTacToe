@@ -5,6 +5,20 @@ using NUnit.Framework;
 
 namespace TicTacToe
 {
+    public class Turn
+    {
+        public Turn(char mark, int x, int y)
+        {
+            Mark = mark;
+            X = x;
+            Y = y;
+        }
+
+        public char Mark { get; private set; }
+        public int X { get; private set; }
+        public int Y { get; private set; }
+    }
+
 	[TestFixture]
 	public class Tests
 	{
@@ -12,25 +26,30 @@ namespace TicTacToe
 		const int boardWidth = 3;
 		IEnumerable<int> allowedHeights = Enumerable.Range(1, boardHeight);
 		IEnumerable<int> allowedWidths = Enumerable.Range (1, boardWidth);
-		IList<char> turns;
+		IList<Turn> turns;
 
 		[SetUp]
 		public void Setup ()
 		{
-			turns = new List<char>();
+			turns = new List<Turn>();
 		}
 
-		void play (char turn, int x, int y)
+		void play (char mark, int x, int y)
 		{
-			ThrowIfFirstTurnIsO (turn);
-			ThrowIfPreviousTurnWasBySameThePlayer(turn);
-
-			turns.Add(turn);
+			play(new Turn(mark, x, y));
 		}
+
+        void play(Turn turn)
+        {
+            ThrowIfFirstTurnIsO(turn.Mark);
+            ThrowIfPreviousTurnWasBySameThePlayer(turn.Mark);
+            
+            turns.Add(turn);
+        }
 
 		void ThrowIfPreviousTurnWasBySameThePlayer (char turn)
 		{
-			if (turn == turns.LastOrDefault ()) 
+			if (turn == turns.Select(t => t.Mark).LastOrDefault ()) 
 			{
 				throw new Exception();
 			}
@@ -137,21 +156,37 @@ namespace TicTacToe
 		[Test]
 		public void XPlaysFirstAndTheMarkIsSaved ()
 		{
-			var expected = 'X';
+		    Turn turn = new Turn('X', 1, 1);
 
-			play(expected, 1, 1);
+            play(turn);
 
-			Assert.That (turns.Contains(expected));
+			Assert.That (GetLastTurn().Mark, Is.EqualTo(turn.Mark));
 		}
 
-		[Test]
-		public void XPlaysFirstAndTheCoordinatesAreSaved()
+	    private Turn GetLastTurn()
+	    {
+	        return turns.Last();
+	    }
+
+	    [Test]
+		public void XPlaysFirstAndTheXCoordinateIsSaved()
 		{
-			var expectedX = 1;
-			var expectedY = 2;
+            Turn turn = new Turn('X', 2, 2);
 
-			Assert.Fail();
+			play(turn);
+
+            Assert.That(GetLastTurn().X, Is.EqualTo(turn.X));
 		}
+
+        [Test]
+        public void XPlaysFirstAndTheYCoordinateIsSaved()
+        {
+            Turn turn = new Turn('X', 2, 2);
+
+            play(turn);
+
+            Assert.That(GetLastTurn().Y, Is.EqualTo(turn.Y));
+        }
 
 	}
 }
