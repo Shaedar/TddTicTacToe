@@ -43,26 +43,19 @@ namespace TicTacToe
 			}
 		}
 
-		[Test]
-		[ExpectedException(typeof(Exception))]
-		public void PlayerCannotPlayTwiceInARow ()
-		{
-			play ('X', 1, 1);
-			play ('X', 1, 2);
-		}
-
+		
 		void ThrowIfHeightNotAllowed (int moveY)
 		{
 			if (!IsHeightAllowed (moveY)) {
 				throw new Exception ();
 			}
 		}
-
+		
 		bool IsHeightAllowed (int moveY)
 		{
 			return allowedHeights.Contains(moveY);
 		}
-
+		
 		void ThrowIfWidthNotAllowed (int moveX)
 		{
 			if (!IsWidthAllowed (moveX)) 
@@ -70,10 +63,18 @@ namespace TicTacToe
 				throw new Exception ();
 			}
 		}
-
+		
 		bool IsWidthAllowed (int moveX)
 		{
 			return allowedWidths.Contains (moveX);
+		}
+
+		[Test]
+		[ExpectedException(typeof(Exception))]
+		public void PlayerCannotPlayTwiceInARow ()
+		{
+			play ('X', 1, 1);
+			play ('X', 1, 2);
 		}
 
 		[Test]
@@ -134,15 +135,24 @@ namespace TicTacToe
 		}
 
 		[Test]
-		public void PlayerWithThreeHorizontalWins ()
+		public void XPlaysFirstAndTheMarkIsSaved ()
 		{
-			play ('X', 1, 1);
-			play ('O', 1, 2);
-			play ('X', 2, 1);
-			play ('O', 2, 2);
-			play ('X', 3, 1);
+			var expected = 'X';
 
+			play(expected, 1, 1);
+
+			Assert.That (turns.Contains(expected));
 		}
+
+		[Test]
+		public void XPlaysFirstAndTheCoordinatesAreSaved()
+		{
+			var expectedX = 1;
+			var expectedY = 2;
+
+			Assert.Fail();
+		}
+
 	}
 }
 
