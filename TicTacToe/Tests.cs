@@ -36,18 +36,15 @@ namespace TicTacToe
 
 		void play (char mark, int x, int y)
 		{
-			play(new Turn(mark, x, y));
+            ThrowIfFirstTurnIsO(mark);
+            ThrowIfPreviousTurnWasBySameThePlayer(mark);
+            
+            Turn turn = new Turn(mark, x, y);
+            
+		    turns.Add(turn);
 		}
 
-        void play(Turn turn)
-        {
-            ThrowIfFirstTurnIsO(turn.Mark);
-            ThrowIfPreviousTurnWasBySameThePlayer(turn.Mark);
-            
-            turns.Add(turn);
-        }
-
-		void ThrowIfPreviousTurnWasBySameThePlayer (char turn)
+	    void ThrowIfPreviousTurnWasBySameThePlayer (char turn)
 		{
 			if (turn == turns.Select(t => t.Mark).LastOrDefault ()) 
 			{
@@ -156,11 +153,9 @@ namespace TicTacToe
 		[Test]
 		public void XPlaysFirstAndTheMarkIsSaved ()
 		{
-		    Turn turn = new Turn('X', 1, 1);
+            play('X', 1, 1);
 
-            play(turn);
-
-			Assert.That (GetLastTurn().Mark, Is.EqualTo(turn.Mark));
+			Assert.That (GetLastTurn().Mark, Is.EqualTo('X'));
 		}
 
 	    private Turn GetLastTurn()
@@ -171,21 +166,17 @@ namespace TicTacToe
 	    [Test]
 		public void XPlaysFirstAndTheXCoordinateIsSaved()
 		{
-            Turn turn = new Turn('X', 2, 2);
+            play('X', 2, 3);
 
-			play(turn);
-
-            Assert.That(GetLastTurn().X, Is.EqualTo(turn.X));
+            Assert.That(GetLastTurn().X, Is.EqualTo(2));
 		}
 
         [Test]
         public void XPlaysFirstAndTheYCoordinateIsSaved()
         {
-            Turn turn = new Turn('X', 2, 2);
+            play('X', 3, 2);
 
-            play(turn);
-
-            Assert.That(GetLastTurn().Y, Is.EqualTo(turn.Y));
+            Assert.That(GetLastTurn().Y, Is.EqualTo(2));
         }
 
 	}
