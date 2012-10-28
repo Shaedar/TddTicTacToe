@@ -179,6 +179,12 @@ namespace TicTacToe
             Assert.That(GetLastTurn().Y, Is.EqualTo(2));
         }
 
+	    [Test]
+	    public void PlayerWithThreeHorizontalMarksWins()
+	    {
+	        Assert.Fail();
+	    }
+
 	}
 }
 
