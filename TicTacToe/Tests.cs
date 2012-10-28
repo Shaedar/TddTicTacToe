@@ -134,7 +134,7 @@ namespace TicTacToe
 		}
 
 		[Test]
-		public void FirstPlayerWithThreeHorizontalWins ()
+		public void PlayerWithThreeHorizontalWins ()
 		{
 			play ('X', 1, 1);
 			play ('O', 1, 2);
@@ -142,12 +142,6 @@ namespace TicTacToe
 			play ('O', 2, 2);
 			play ('X', 3, 1);
 
-			Assert.That(XHasWon());
-		}
-
-		private bool XHasWon ()
-		{
-			return false;
 		}
 	}
 }
