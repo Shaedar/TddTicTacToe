@@ -95,15 +95,19 @@ namespace TicTacToe
 
 		private char GetWinner ()
 		{
-			var turns1 = turns.Where (turnIsOnFirstHorizontalLine);
-			var turns2 = turns.Where (turnIsOnDiagonal);
+			return GetWinner(turnIsOnFirstHorizontalLine, turnIsOnDiagonal);
+		}
 
-			if (WinnerExists (turns1)) {
-				return GetWinnerFromTurns (turns1);
-			}
+		private char GetWinner (params Func<Turn, bool>[] predicates)
+		{
+			foreach(var predicate in predicates)
+			{
+				var filteredTurns = turns.Where(predicate);
 
-			if (WinnerExists (turns2)) {
-				return GetWinnerFromTurns (turns2);
+				if(WinnerExists(filteredTurns))
+				{
+					return GetWinnerFromTurns(filteredTurns);
+				}
 			}
 
 			return 'Å';
