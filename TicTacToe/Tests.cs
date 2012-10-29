@@ -93,6 +93,37 @@ namespace TicTacToe
 			return turns.Last();
 		}
 
+		private char GetWinner ()
+		{
+			var turns1 = turns.Where (turnIsOnFirstHorizontalLine);
+			var turns2 = turns.Where (turnIsOnDiagonal);
+
+			if (WinnerExists (turns1)) {
+				return GetWinnerFromTurns (turns1);
+			}
+
+			if (WinnerExists (turns2)) {
+				return GetWinnerFromTurns (turns2);
+			}
+
+			return 'Å';
+		}
+
+		private bool WinnerExists (IEnumerable<Turn> turns)
+		{
+			return GetDistinctMarks(turns).Count() == 1;
+		}
+
+		private char GetWinnerFromTurns (IEnumerable<Turn> turns)
+		{
+			return GetDistinctMarks (turns).Single();
+		}
+
+		private IEnumerable<char> GetDistinctMarks (IEnumerable<Turn> turns)
+		{
+			return turns.Select(t => t.Mark).Distinct();
+		}
+
 		[Test]
 		[ExpectedException(typeof(Exception))]
 		public void PlayerCannotPlayTwiceInARow ()
@@ -185,32 +216,18 @@ namespace TicTacToe
 	    [Test]
 		public void XPlaysThreeInHorizontalLineAndWins ()
 		{
-			char expected = 'X';
-			char winner = 'Å';
-
 			play ('X', 1, 1);
 			play ('O', 2, 2);
 			play ('X', 2, 1);
 			play ('O', 3, 3);
 			play ('X', 3, 1);
 
-			var turnsInHorizontalLine = turns.Where (turnIsOnFirstHorizontalLine);
-			var marks = turnsInHorizontalLine.Select (t => t.Mark).Distinct ();
-
-			if (marks.Count () == 1) 
-			{
-				winner = marks.Single ();
-			}
-
-			Assert.That (winner, Is.EqualTo(expected));
+			Assert.That (GetWinner(), Is.EqualTo('X'));
 	    }
 
 		[Test]
 		public void OPlaysThreeInDiagonalAndWins ()
 		{
-			char expected = 'O';
-			char winner = 'Å';
-
 			play ('X', 1, 2);
 			play ('O', 1, 1);
 			play ('X', 1, 3);
@@ -218,15 +235,7 @@ namespace TicTacToe
 			play ('X', 3, 1);
 			play ('O', 3, 3);
 
-			var turnsInDiagonal = turns.Where (turnIsOnDiagonal);
-			var marks = turnsInDiagonal.Select(t => t.Mark).Distinct();
-
-			if(marks.Count() == 1)
-			{
-				winner = marks.Single();
-			}
-
-			Assert.That (winner, Is.EqualTo(expected));
+			Assert.That (GetWinner(), Is.EqualTo('O'));
 		}
 
 	}
