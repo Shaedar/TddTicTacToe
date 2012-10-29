@@ -234,6 +234,18 @@ namespace TicTacToe
 			Assert.That (GetWinner(), Is.EqualTo('O'));
 		}
 
+		[Test]
+		public void XPlaysThreeInInvertedDiagonalAndWins()
+		{
+			play ('X', 3, 1);
+			play ('O', 1, 1);
+			play ('X', 2, 2);
+			play ('O', 3, 3);
+			play ('X', 1, 3);
+
+			Assert.That(GetWinner(), Is.EqualTo('X'));
+		}
+
 	}
 }
 
