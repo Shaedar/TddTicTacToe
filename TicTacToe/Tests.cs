@@ -85,6 +85,11 @@ namespace TicTacToe
 			return allowedWidths.Contains (moveX);
 		}
 
+		private Turn GetLastTurn()
+		{
+			return turns.Last();
+		}
+
 		[Test]
 		[ExpectedException(typeof(Exception))]
 		public void PlayerCannotPlayTwiceInARow ()
@@ -158,11 +163,6 @@ namespace TicTacToe
 			Assert.That (GetLastTurn().Mark, Is.EqualTo('X'));
 		}
 
-	    private Turn GetLastTurn()
-	    {
-	        return turns.Last();
-	    }
-
 	    [Test]
 		public void XPlaysFirstAndTheXCoordinateIsSaved()
 		{
@@ -180,10 +180,35 @@ namespace TicTacToe
         }
 
 	    [Test]
-	    public void PlayerWithThreeHorizontalMarksWins()
+	    public void XPlaysThreeInHorizontalLineAndWins()
 	    {
-	        Assert.Fail();
+			char expected = 'X';
+			char winner = 'Å';
+
+			play ('X', 1, 1);
+			play ('O', 2, 2);
+			play ('X', 2, 1);
+			play ('O', 3, 3);
+			play ('X', 3, 1);
+
+			var turnsInHorizontalLine = turns.Where (t => t.X == 1 || t.X == 2 || t.X == 3);
+			var turnsInHorizontalForX = turnsInHorizontalLine.Count (t => t.Mark == 'X');
+
+			if (turnsInHorizontalForX == 3)
+				winner = 'X';
+
+			Assert.That (winner, Is.EqualTo(expected));
 	    }
+
+		[Test]
+		public void OPlaysThreeInDiagonalAndWins ()
+		{
+			char expected = 'O';
+			char winner = 'Å';
+
+
+			Assert.That (winner, Is.EqualTo(expected));
+		}
 
 	}
 }
