@@ -28,6 +28,9 @@ namespace TicTacToe
 		IEnumerable<int> allowedWidths = Enumerable.Range (1, boardWidth);
 		IList<Turn> turns;
 
+		Func<Turn, bool> turnIsOnFirstHorizontalLine = t => t.Y == 1;
+		Func<Turn, bool> turnIsOnDiagonal = t => t.X == t.Y;
+
 		[SetUp]
 		public void Setup ()
 		{
@@ -180,8 +183,8 @@ namespace TicTacToe
         }
 
 	    [Test]
-	    public void XPlaysThreeInHorizontalLineAndWins()
-	    {
+		public void XPlaysThreeInHorizontalLineAndWins ()
+		{
 			char expected = 'X';
 			char winner = 'Å';
 
@@ -191,11 +194,13 @@ namespace TicTacToe
 			play ('O', 3, 3);
 			play ('X', 3, 1);
 
-			var turnsInHorizontalLine = turns.Where (t => t.X == 1 || t.X == 2 || t.X == 3);
-			var turnsInHorizontalForX = turnsInHorizontalLine.Count (t => t.Mark == 'X');
+			var turnsInHorizontalLine = turns.Where (turnIsOnFirstHorizontalLine);
+			var marks = turnsInHorizontalLine.Select (t => t.Mark).Distinct ();
 
-			if (turnsInHorizontalForX == 3)
-				winner = 'X';
+			if (marks.Count () == 1) 
+			{
+				winner = marks.Single ();
+			}
 
 			Assert.That (winner, Is.EqualTo(expected));
 	    }
@@ -206,6 +211,20 @@ namespace TicTacToe
 			char expected = 'O';
 			char winner = 'Å';
 
+			play ('X', 1, 2);
+			play ('O', 1, 1);
+			play ('X', 1, 3);
+			play ('O', 2, 2);
+			play ('X', 3, 1);
+			play ('O', 3, 3);
+
+			var turnsInDiagonal = turns.Where (turnIsOnDiagonal);
+			var marks = turnsInDiagonal.Select(t => t.Mark).Distinct();
+
+			if(marks.Count() == 1)
+			{
+				winner = marks.Single();
+			}
 
 			Assert.That (winner, Is.EqualTo(expected));
 		}
