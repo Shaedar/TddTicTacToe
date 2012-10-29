@@ -41,10 +41,21 @@ namespace TicTacToe
 		{
             ThrowIfFirstTurnIsO(mark);
             ThrowIfPreviousTurnWasBySameThePlayer(mark);
+			ThrowIfCoordinatesAlreadyPlayed(x, y);
+			ThrowIfHeightNotAllowed(y);
+			ThrowIfWidthNotAllowed(x);
             
             Turn turn = new Turn(mark, x, y);
             
 		    turns.Add(turn);
+		}
+
+		void ThrowIfCoordinatesAlreadyPlayed (int x, int y)
+		{
+			if (turns.Any (t => t.X == x && t.Y == y)) 
+			{
+				throw new Exception ();
+			}
 		}
 
 	    void ThrowIfPreviousTurnWasBySameThePlayer (char turn)
@@ -63,29 +74,29 @@ namespace TicTacToe
 		}
 
 		
-		void ThrowIfHeightNotAllowed (int moveY)
+		void ThrowIfHeightNotAllowed (int y)
 		{
-			if (!IsHeightAllowed (moveY)) {
+			if (!IsHeightAllowed (y)) {
 				throw new Exception ();
 			}
 		}
 		
-		bool IsHeightAllowed (int moveY)
+		bool IsHeightAllowed (int y)
 		{
-			return allowedHeights.Contains(moveY);
+			return allowedHeights.Contains(y);
 		}
 		
-		void ThrowIfWidthNotAllowed (int moveX)
+		void ThrowIfWidthNotAllowed (int x)
 		{
-			if (!IsWidthAllowed (moveX)) 
+			if (!IsWidthAllowed (x)) 
 			{
 				throw new Exception ();
 			}
 		}
 		
-		bool IsWidthAllowed (int moveX)
+		bool IsWidthAllowed (int x)
 		{
-			return allowedWidths.Contains (moveX);
+			return allowedWidths.Contains (x);
 		}
 
 		private Turn GetLastTurn()
@@ -129,68 +140,49 @@ namespace TicTacToe
 		}
 
 		[Test]
-		[ExpectedException(typeof(Exception))]
 		public void PlayerCannotPlayTwiceInARow ()
 		{
 			play ('X', 1, 1);
-			play ('X', 1, 2);
+
+			Assert.Throws<Exception>(() => play ('X', 1, 2));
 		}
 
 		[Test]
-		[ExpectedException(typeof(Exception))]
 		public void CannotPlayMarkAboveTheBoardEdges ()
 		{
-			int moveY = 4;
-
-			ThrowIfHeightNotAllowed (moveY);
+			Assert.Throws<Exception>(() => play ('X', 1, 4));
 		}
 
 		[Test]
-		[ExpectedException(typeof(Exception))]
 		public void CannotPlayMarkBelowTheBoardEdges ()
 		{
-			int moveY = 0;
-
-			ThrowIfHeightNotAllowed(moveY);
+			Assert.Throws<Exception>(() => play ('X', 1, 0));
 		}
 
 		[Test]
-		[ExpectedException(typeof(Exception))]
 		public void CannotPlayMarkLeftOfTheBoardEdges ()
 		{
-			int moveX = 0;
-
-			ThrowIfWidthNotAllowed(moveX);
+			Assert.Throws<Exception>(() => play ('X', 0, 1));
 		}
 		
 		[Test]
-		[ExpectedException(typeof(Exception))]
 		public void CannotPlayMarkRightOfTheBoardEdges ()
 		{
-			int moveX = 4;
-
-			ThrowIfWidthNotAllowed(moveX);
+			Assert.Throws<Exception>(() => play ('X', 4, 1));
 		}
 
 		[Test]
-		[ExpectedException(typeof(Exception))]
 		public void CannotPlayMarkOverAlreadyPlayedMark ()
 		{
-			int previousMarkHeight = 2;
-			int previousMarkWidth = 2;
+			play ('X', 2, 2);
 
-			int nextMarkHeight = 2;
-			int nextMarkWidth = 2;
-
-			if (previousMarkHeight == nextMarkHeight && previousMarkWidth == nextMarkWidth)
-				throw new Exception();
+			Assert.Throws<Exception>(() => play ('O', 2, 2));
 		}
 
 		[Test]
-		[ExpectedException(typeof(Exception))]
 		public void ODoesNotStartTheGame ()
 		{
-			play('O', 1, 1);
+			Assert.Throws<Exception>(() => play('O', 1, 1));
 		}
 
 		[Test]
