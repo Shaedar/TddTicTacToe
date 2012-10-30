@@ -289,6 +289,17 @@ namespace TicTacToe
 			Assert.Throws<Exception>(() => play ('O', 1, 1));
 		}
 
+		[Test]
+		public void XPlaysTheSecondVerticalLineAndWins()
+		{
+			play ('X', 2, 1);
+			play ('O', 1, 1);
+			play ('X', 2, 2);
+			play ('O', 1, 2);
+			play ('X', 2, 3);
+
+			Assert.That(GetWinner(), Is.EqualTo('X'));
+		}
 	}
 }
 
