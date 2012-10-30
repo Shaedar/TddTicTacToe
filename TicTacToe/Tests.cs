@@ -248,7 +248,7 @@ namespace TicTacToe
 		}
 
 		[Test]
-		public void XPlaysThreeInFirstVerticallLineAndWins()
+		public void XPlaysThreeInLastVerticallLineAndWins()
 		{
 			play ('X', 3, 1);
 			play ('O', 2, 2);
@@ -257,6 +257,18 @@ namespace TicTacToe
 			play ('X', 3, 3);
 
 			Assert.That (GetWinner(), Is.EqualTo('X'));
+		}
+
+		[Test]
+		public void XWinsSoTheGameEndsAndNoMoreTurnsCanBePlayed()
+		{
+			play ('X', 3, 1);
+			play ('O', 2, 2);
+			play ('X', 3, 2);
+			play ('O', 2, 3);
+			play ('X', 3, 3);
+
+			Assert.Throws<Exception>(() => play ('O', 1, 1));
 		}
 
 	}
