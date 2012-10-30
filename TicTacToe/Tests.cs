@@ -30,6 +30,7 @@ namespace TicTacToe
 
 		Func<Turn, bool> turnIsOnFirstHorizontalLine = t => t.Y == 1;
 		Func<Turn, bool> turnIsOnDiagonal = t => t.X == t.Y;
+		Func<Turn, bool> turnIsOnInvertedDiagonal = t => ((t.X == 3 && t.Y == 1) || (t.X == 2 && t.Y == 2) || (t.X == 1 && t.Y == 3));
 
 		[SetUp]
 		public void Setup ()
@@ -106,7 +107,7 @@ namespace TicTacToe
 
 		private char GetWinner ()
 		{
-			return GetWinner(turnIsOnFirstHorizontalLine, turnIsOnDiagonal);
+			return GetWinner(turnIsOnFirstHorizontalLine, turnIsOnDiagonal, turnIsOnInvertedDiagonal);
 		}
 
 		private char GetWinner (params Func<Turn, bool>[] predicates)
@@ -246,6 +247,19 @@ namespace TicTacToe
 			Assert.That(GetWinner(), Is.EqualTo('X'));
 		}
 
+		[Test]
+		public void XPlaysThreeInFirstVerticallLineAndWins()
+		{
+			play ('X', 3, 1);
+			play ('O', 2, 2);
+			play ('X', 3, 2);
+			play ('O', 2, 3);
+			play ('X', 3, 3);
+
+			Assert.That (GetWinner(), Is.EqualTo('X'));
+		}
+
 	}
 }
 
+       
