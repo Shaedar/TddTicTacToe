@@ -31,6 +31,7 @@ namespace TicTacToe
 		Func<Turn, bool> turnIsOnFirstHorizontalLine = t => t.Y == 1;
 		Func<Turn, bool> turnIsOnDiagonal = t => t.X == t.Y;
 		Func<Turn, bool> turnIsOnInvertedDiagonal = t => t.X == boardHeight - t.X + 1;
+		Func<Turn, bool> turnIsOnLastVerticalLine = t => t.X == boardWidth;
 
 		[SetUp]
 		public void Setup ()
@@ -40,6 +41,7 @@ namespace TicTacToe
 
 		void play (char mark, int x, int y)
 		{
+			ThrowIfGameHasEnded();
             ThrowIfFirstTurnIsO(mark);
             ThrowIfPreviousTurnWasBySameThePlayer(mark);
 			ThrowIfCoordinatesAlreadyPlayed(x, y);
@@ -49,6 +51,16 @@ namespace TicTacToe
             Turn turn = new Turn(mark, x, y);
             
 		    turns.Add(turn);
+		}
+
+		void ThrowIfGameHasEnded ()
+		{
+			char winner = GetWinner();
+
+			if(winner == 'X' || winner == 'O')
+			{
+				throw new Exception();
+			}
 		}
 
 		void ThrowIfCoordinatesAlreadyPlayed (int x, int y)
@@ -107,32 +119,38 @@ namespace TicTacToe
 
 		private char GetWinner ()
 		{
-			return GetWinner(turnIsOnFirstHorizontalLine, turnIsOnDiagonal, turnIsOnInvertedDiagonal);
+			return GetWinner(turnIsOnFirstHorizontalLine, 
+			                 turnIsOnDiagonal, 
+			                 turnIsOnInvertedDiagonal,
+			                 turnIsOnLastVerticalLine);
 		}
 
 		private char GetWinner (params Func<Turn, bool>[] predicates)
 		{
 			foreach(var predicate in predicates)
 			{
-				var filteredTurns = turns.Where(predicate);
-
-				if(WinnerExists(filteredTurns))
+				if(HasWinner(predicate))
 				{
-					return GetWinnerFromTurns(filteredTurns);
+					return GetWinner(predicate);
 				}
 			}
 
 			return 'Å';
 		}
 
-		private bool WinnerExists (IEnumerable<Turn> turns)
+		private bool HasWinner (Func<Turn, bool> predicate)
 		{
-			return GetDistinctMarks(turns).Count() == 1;
+			var filteredTurns = turns.Where(predicate);
+
+			return filteredTurns.Count() == 3
+				&& GetDistinctMarks(filteredTurns).Count() == 1;
 		}
 
-		private char GetWinnerFromTurns (IEnumerable<Turn> turns)
+		private char GetWinner (Func<Turn, bool> predicate)
 		{
-			return GetDistinctMarks (turns).Single();
+			var filteredTurns = turns.Where(predicate);
+
+			return GetDistinctMarks(filteredTurns).Single();
 		}
 
 		private IEnumerable<char> GetDistinctMarks (IEnumerable<Turn> turns)
