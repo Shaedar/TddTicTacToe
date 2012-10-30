@@ -30,7 +30,7 @@ namespace TicTacToe
 
 		Func<Turn, bool> turnIsOnFirstHorizontalLine = t => t.Y == 1;
 		Func<Turn, bool> turnIsOnDiagonal = t => t.X == t.Y;
-		Func<Turn, bool> turnIsOnInvertedDiagonal = t => t.X == boardHeight - t.X + 1;
+		Func<Turn, bool> turnIsOnInvertedDiagonal = t => t.Y == boardHeight - t.X + 1;
 		Func<Turn, bool> turnIsOnLastVerticalLine = t => t.X == boardWidth;
 
 		[SetUp]
