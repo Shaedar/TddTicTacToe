@@ -31,6 +31,7 @@ namespace TicTacToe
 		Func<Turn, bool> turnIsOnFirstHorizontalLine = t => t.Y == 1;
 		Func<Turn, bool> turnIsOnDiagonal = t => t.X == t.Y;
 		Func<Turn, bool> turnIsOnInvertedDiagonal = t => t.Y == boardHeight - t.X + 1;
+		Func<Turn, bool> turnIsOnSecondVerticallLine = t => t.X == boardWidth - 1;
 		Func<Turn, bool> turnIsOnLastVerticalLine = t => t.X == boardWidth;
 
 		[SetUp]
@@ -119,7 +120,8 @@ namespace TicTacToe
 
 		private char GetWinner ()
 		{
-			return GetWinner(turnIsOnFirstHorizontalLine, 
+			return GetWinner(turnIsOnFirstHorizontalLine,
+			                 turnIsOnSecondVerticallLine,
 			                 turnIsOnDiagonal, 
 			                 turnIsOnInvertedDiagonal,
 			                 turnIsOnLastVerticalLine);
@@ -300,6 +302,19 @@ namespace TicTacToe
 
 			Assert.That(GetWinner(), Is.EqualTo('X'));
 		}
+
+		[Test]
+		public void XPlaysTheFirstVerticalLineAndWins()
+		{
+			play ('X', 1, 1);
+			play ('O', 2, 1);
+			play ('X', 1, 2);
+			play ('O', 3, 2);
+			play ('X', 1, 3);
+			
+			Assert.That(GetWinner(), Is.EqualTo('X'));
+		}
+
 	}
 }
 
