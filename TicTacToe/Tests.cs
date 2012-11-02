@@ -27,7 +27,6 @@ namespace TicTacToe
         IEnumerable<int> allowedWidths = Enumerable.Range(1, boardWidth);
         IList<Turn> turns;
 
-        Func<Turn, bool> turnIsOnFirstHorizontalLine = t => t.Y == 1;
         Func<Turn, bool> turnIsOnDiagonal = t => t.X == t.Y;
         Func<Turn, bool> turnIsOnInvertedDiagonal = t => t.Y == boardHeight - t.X + 1;
 
@@ -43,6 +42,14 @@ namespace TicTacToe
                 return allowedWidths.Select(w => new Func<Turn, bool>(t => t.X == w));
             }
         }
+
+		IEnumerable<Func<Turn, bool>> HorizontalLinePredicates
+		{
+			get
+			{
+				return allowedHeights.Select(h => new Func<Turn, bool>(t => t.Y == h));
+			}
+		}
 
         void ThrowIfGameHasEnded()
         {
@@ -77,7 +84,6 @@ namespace TicTacToe
                 throw new Exception();
             }
         }
-
 
         void ThrowIfHeightNotAllowed(int y)
         {
@@ -114,10 +120,10 @@ namespace TicTacToe
         {
             List<Func<Turn, bool>> predicates = new List<Func<Turn, bool>>();
 
-            predicates.Add(turnIsOnFirstHorizontalLine);
             predicates.Add(turnIsOnDiagonal);
             predicates.Add(turnIsOnInvertedDiagonal);
             predicates.AddRange(VerticalLinePredicates);
+			predicates.AddRange(HorizontalLinePredicates);
 
             return GetWinner(predicates);
         }
@@ -362,6 +368,22 @@ namespace TicTacToe
 			Play ('X', 1, 3);
 			
 			Assert.That(GetWinner(), Is.EqualTo('X'));
+		}
+
+		[Test]
+		public void ADrawIsPlayedSoNoWinnerIsFound ()
+		{
+			Play ('X', 1, 1);
+			Play ('O', 1, 2);
+			Play ('X', 1, 3);
+			Play ('O', 2, 1);
+			Play ('X', 3, 2);			
+			Play ('O', 2, 2);
+			Play ('X', 3, 1);	
+			Play ('O', 2, 3);
+			Play ('X', 3, 3);
+
+			Assert.That (GetWinner(), Is.EqualTo('-'));
 		}
 
 	}
