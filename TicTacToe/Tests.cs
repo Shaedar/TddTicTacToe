@@ -31,11 +31,16 @@ namespace TicTacToe
 		Func<Turn, bool> turnIsOnFirstHorizontalLine = t => t.Y == 1;
 		Func<Turn, bool> turnIsOnDiagonal = t => t.X == t.Y;
 		Func<Turn, bool> turnIsOnInvertedDiagonal = t => t.Y == boardHeight - t.X + 1;
-        Func<Turn, bool> turnIsOnFirstVerticallLine = t => t.X == 1;
-        Func<Turn, bool> turnIsOnSecondVerticallLine = t => t.X == boardWidth - 1;
-		Func<Turn, bool> turnIsOnLastVerticalLine = t => t.X == boardWidth;
 
-		[SetUp]
+	    private IEnumerable<Func<Turn, bool>> VerticalLinePredicates
+	    {
+	        get
+	        {
+	            return allowedWidths.Select(w => new Func<Turn, bool>(t => t.X == w));
+	        }
+	    }
+
+	    [SetUp]
 		public void Setup ()
 		{
 			turns = new List<Turn>();
@@ -121,15 +126,17 @@ namespace TicTacToe
 
 		private char GetWinner ()
 		{
-			return GetWinner(turnIsOnFirstHorizontalLine,
-                             turnIsOnFirstVerticallLine,
-			                 turnIsOnSecondVerticallLine,
-			                 turnIsOnDiagonal, 
-			                 turnIsOnInvertedDiagonal,
-			                 turnIsOnLastVerticalLine);
+		    List<Func<Turn, bool>> predicates = new List<Func<Turn, bool>>();
+
+            predicates.Add(turnIsOnFirstHorizontalLine);
+            predicates.Add(turnIsOnDiagonal);
+            predicates.Add(turnIsOnInvertedDiagonal);
+            predicates.AddRange(VerticalLinePredicates);
+
+            return GetWinner(predicates);
 		}
 
-		private char GetWinner (params Func<Turn, bool>[] predicates)
+		private char GetWinner (IEnumerable<Func<Turn, bool>> predicates)
 		{
 			foreach(var predicate in predicates)
 			{
