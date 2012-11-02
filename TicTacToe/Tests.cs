@@ -268,7 +268,7 @@ namespace TicTacToe
         }
 
 	    [Test]
-		public void XPlaysThreeInHorizontalLineAndWins ()
+		public void XPlaysTheFirstHorizontalLineAndWins ()
 		{
 			Play ('X', 1, 1);
 			Play ('O', 2, 2);
@@ -278,6 +278,18 @@ namespace TicTacToe
 
 			Assert.That (GetWinner(), Is.EqualTo('X'));
 	    }
+
+        [Test]
+        public void XPlaysTheSecondHorizontalLineAndWins()
+        {
+            Play('X', 1, 2);
+            Play('O', 2, 1);
+            Play('X', 2, 2);
+            Play('O', 3, 3);
+            Play('X', 3, 2);
+
+            Assert.That(GetWinner(), Is.EqualTo('X'));
+        }
 
 		[Test]
 		public void OPlaysThreeInDiagonalAndWins ()
