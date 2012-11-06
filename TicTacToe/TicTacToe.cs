@@ -132,7 +132,7 @@ namespace TicTacToe
                 }
             }
 
-            return 'Å';
+            return '-';
         }
 
         private bool HasWinner(Func<Turn, bool> predicate)

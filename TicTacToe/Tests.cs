@@ -168,7 +168,7 @@ namespace TicTacToe
 		}
 
 		[Test]
-		public void ADrawIsPlayedSoNoWinnerIsFound ()
+		public void EverybodyIsALoser ()
 		{
 			Play ('X', 1, 1);
 			Play ('O', 1, 2);
@@ -177,11 +177,24 @@ namespace TicTacToe
 			Play ('X', 3, 2);			
 			Play ('O', 2, 2);
 			Play ('X', 3, 1);	
-			Play ('O', 2, 3);
-			Play ('X', 3, 3);
+			Play ('O', 3, 3);
+			Play ('X', 2, 3);
 
 			Assert.That (GetWinner(), Is.EqualTo('-'));
 		}
+
+        [Test]
+        public void ADrawIsPlayedSoNoWinnerIsFound()
+        {
+            Play('X', 1, 1);
+            Play('O', 1, 2);
+            Play('X', 2, 1);
+            Play('O', 2, 2);
+            Play('X', 3, 1);
+            Play('O', 3, 2);
+
+            Assert.That(GetWinner(), Is.EqualTo('-'));
+        }
 
 	}
 }
